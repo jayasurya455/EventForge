@@ -1,0 +1,92 @@
+<app-shell>
+
+  <app-top-nav [rightTemplate]="rightTemplate"></app-top-nav>
+  <ng-template #rightTemplate>
+    <app-button variant="primary" color="green" (clickTriggered)="viewTeams()">
+      <app-icon name="groups" size="sm"></app-icon>
+      View Teams
+    </app-button>
+
+    <app-button variant="primary" color="blue" (clickTriggered)="viewPlayers()">
+      <app-icon name="search-person" size="sm"></app-icon>
+      View Players
+    </app-button>
+  </ng-template>
+
+  <app-loader *ngIf="loading()" message="Leagues are being loaded..."></app-loader>
+  <ng-container *ngIf="!loading()">
+    <div class="w-full px-12">
+      <section class="rounded-3xl bg-[var(--surface-1)] p-8">
+        <div class="flex gap-24">
+
+          <!-- LEFT: Main Content -->
+          <section class="flex-1">
+            <header class="mb-10">
+              <h2 class="text-2xl font-semibold mb-1">Leagues</h2>
+            </header>
+
+            <div class="grid grid-cols-2 gap-8">
+              <ng-container *ngFor="let league of leagues()">
+                <div (click)="selectLeague(league)">
+                  <league-card [isSelected]="selectedLeague()?.id == league.id" [title]="league.name"
+                    [subtitle]="league.description ?? ''" [teams]="league.maxTeams" [leagueDetails]="league"
+                    [players]="getMaxPlayers(league)" [status]="'LIVE'">
+                  </league-card>
+                </div>
+              </ng-container>
+
+              <app-action-card icon="add" title="Create New League" subtitle="Set up a new auction event"
+                (click)="createLeague()">
+              </app-action-card>
+
+            </div>
+          </section>
+
+          <!-- RIGHT: Quick Stats -->
+          <aside class="w-[360px] shrink-0">
+            <div class="sticky top-32 flex flex-col gap-4">
+              <h3 class="text-sm font-semibold uppercase tracking-wide opacity-70">
+                Quick Stats
+              </h3>
+
+              <!-- No league selected -->
+              <ng-container *ngIf="!selectedLeague()">
+                <div class="stats-placeholder">
+                  <app-icon name="trophy" size="lg"></app-icon>
+                  <p>Select a league to view stats</p>
+                </div>
+              </ng-container>
+
+              <!-- Stats loading -->
+              <ng-container *ngIf="selectedLeague() && statsLoading()">
+                <div class="stats-placeholder">
+                  <app-icon name="settings" size="lg"></app-icon>
+                  <p>Loading stats…</p>
+                </div>
+              </ng-container>
+
+              <!-- Real stats -->
+              <ng-container *ngIf="selectedLeague() && !statsLoading() && leagueStats()">
+                <div class="stats-league-label">{{ selectedLeague()!.name }}</div>
+                <app-stat-card icon="gavel" label="Total Auctions"
+                  [value]="leagueStats()!.TotalAuctions.toString()">
+                </app-stat-card>
+                <app-stat-card icon="groups" label="Teams Involved"
+                  [value]="leagueStats()!.TotalTeams.toString()">
+                </app-stat-card>
+                <app-stat-card icon="search-person" label="Players Involved"
+                  [value]="leagueStats()!.TotalPlayers.toString()">
+                </app-stat-card>
+                <app-stat-card icon="wallet" label="Total Spent"
+                  [value]="formatMoney(leagueStats()!.TotalSpent)">
+                </app-stat-card>
+              </ng-container>
+
+            </div>
+          </aside>
+
+        </div>
+      </section>
+    </div>
+  </ng-container>
+</app-shell>

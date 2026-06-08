@@ -1,0 +1,92 @@
+<div class="ef-card p-6 relative" [ngClass]="{
+    'border-red-500/40': status === 'LIVE'
+  }">
+
+    <div class="absolute top-6 right-6" (click)="$event.stopPropagation()">
+        <button class="cursor-pointer rounded-lg transition-all relative z-10" (click)="toggleMenu()">
+            <app-icon name="more" size="sm"></app-icon>
+        </button>
+        <div *ngIf="menuOpen"
+            class="menu-more absolute right-0 top-full w-48 bg-[var(--app-bg)] border border-[var(--border)]/10 rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-xl">
+            <div class="p-1.5">
+                <button
+                    class="cursor-pointer w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] rounded-lg transition-colors text-left group/item" (click)="editAuction()">
+                    <app-icon name="edit" size="sm"></app-icon>
+                    <span>Edit</span>
+                </button>
+                <button
+                    class="cursor-pointer w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-left group/item" (click)="cancelAuction()">
+                    <app-icon name="delete" size="sm" class="text-red-400/70 group-hover/item:text-red-400"></app-icon>
+                    <span>Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="flex justify-between items-start mb-6 margin-right-1">
+        <app-icon class="material-symbols-outlined !text-3xl"
+            [name]="status === 'LIVE'? 'gavel': status === 'COMPLETED' ? 'check-circle' : 'calendar-today'" [ngClass]="{
+                'text-red-500': status === 'LIVE',
+                'text-purple-500': status === 'PAUSED',
+                'text-blue-500': status === 'SCHEDULED' || status === 'DRAFT',
+                'text-emerald-500': status === 'COMPLETED'
+            }">
+        </app-icon>
+
+        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" [ngClass]="{
+        'bg-red-500/10 text-red-500 border border-red-500/30': status === 'LIVE',
+        'bg-purple-500/10 text-purple-500 border border-purple-500/30': status === 'PAUSED',
+        'bg-blue-500/10 text-blue-400 border border-blue-500/30': status === 'SCHEDULED' || status === 'DRAFT',
+        'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30': status === 'COMPLETED'
+      }">
+            {{ status }}
+        </span>
+
+    </div>
+
+    <!-- Title -->
+    <h4 class="text-lg font-bold text-white mb-1">
+        {{ title }}
+    </h4>
+
+    <p class="text-slate-500 text-xs mb-8">
+        {{ subtitle }}
+    </p>
+
+    <!-- Actions -->
+    <ng-container [ngSwitch]="status">
+
+        <!-- DRAFT -->
+        <app-button *ngSwitchCase="'DRAFT'" variant="outline" color="blue" (clickTriggered)="completeSteps()">
+            <app-icon name="timer-play"></app-icon>
+            Complete Steps
+        </app-button>
+
+        <!-- LIVE -->
+        <app-button *ngSwitchCase="'LIVE'" variant="primary" color="red" (clickTriggered)="startAuction()">
+            <app-icon name="play-circle"></app-icon>
+            Enter Auction
+        </app-button>
+
+        <!-- PAUSED -->
+        <app-button *ngSwitchCase="'PAUSED'" variant="primary" color="purple" (clickTriggered)="resumeAuction()">
+            <app-icon name="resume"></app-icon>
+            Resume
+        </app-button>
+
+        <!-- SCHEDULED -->
+        <app-button *ngSwitchCase="'SCHEDULED'" variant="primary" color="blue" (clickTriggered)="startAuction()">
+            <app-icon name="timer-play"></app-icon>
+            Start Now
+        </app-button>
+
+        <!-- COMPLETED -->
+        <app-button *ngSwitchCase="'COMPLETED'" variant="outline" (clickTriggered)="viewResults()">
+            <app-icon name="check-circle"></app-icon>
+            View Results
+        </app-button>
+
+    </ng-container>
+
+</div>

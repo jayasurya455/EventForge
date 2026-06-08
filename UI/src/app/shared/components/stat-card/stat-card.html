@@ -1,0 +1,32 @@
+<!-- FULL STAT CARD (Quick Stats) -->
+<div *ngIf="!compact" class="ef-card flex items-center gap-4 rounded-full px-6 py-4 min-w-[220px]">
+    <div class="w-10 h-10 rounded-full flex items-center justify-center
+           bg-[rgba(255,255,255,0.08)]">
+        <app-icon [name]="icon"></app-icon>
+    </div>
+
+    <div>
+        <p class="text-xs uppercase tracking-wide text-[var(--text-muted)]">
+            {{ label }}
+        </p>
+        <p class="text-lg font-semibold">
+            {{ value }}
+        </p>
+    </div>
+</div>
+
+<!-- COMPACT STAT PILL (League Card – Reference Style) -->
+<div *ngIf="compact" class="ef-stat-pill">
+    <div class="ef-stat-pill-icon">
+        <app-icon [name]="icon"></app-icon>
+    </div>
+
+    <div class="ef-stat-pill-text gap-2">
+        <div class="ef-stat-pill-label">
+            {{ label }}
+        </div>
+        <div class="ef-stat-pill-value">
+            {{ value }}
+        </div>
+    </div>
+</div>

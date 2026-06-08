@@ -1,0 +1,16 @@
+@use 'tailwindcss';
+@use './styles/font.css';
+@use './styles/theme.css';
+@use './styles/component.css';
+@import "flatpickr/dist/flatpickr.css";
+
+html, body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: 'Spline Sans', system-ui, sans-serif;
+}
+
+
+.margin-right-1 {
+    margin-right: 1rem;
+}

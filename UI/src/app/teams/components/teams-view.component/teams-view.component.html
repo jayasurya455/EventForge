@@ -1,0 +1,71 @@
+<app-shell>
+    <app-top-nav [rightTemplate]="rightTemplate"></app-top-nav>
+    <ng-template #rightTemplate>
+        <app-button variant="primary" color="green" (clickTriggered)="navigateToCreateTeam()">
+            <app-icon name="add"></app-icon>
+            Add New Team
+        </app-button>
+    </ng-template>
+
+    <app-loader *ngIf="loading()" message="Loading teams..."></app-loader>
+    <div class="w-full px-12">
+        <section class="rounded-3xl bg-[var(--surface-1)] p-8">
+
+            <header class="mb-10 flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-semibold">Teams Available</h2>
+                </div>
+            </header>
+
+            <!-- Filters -->
+            <div class="mb-10 rounded-2xl border border-[var(--border)]
+         bg-[var(--surface-2)] p-5">
+
+                <div class="grid grid-cols-[420px_1fr] gap-6">
+
+                    <!-- League Selector -->
+                    <div>
+                        <label class="block text-xs font-medium uppercase tracking-wide
+               text-[var(--text-muted)] mb-2">
+                            Select League
+                        </label>
+
+                        <div class="ef-select-wrapper">
+                            <select class="ef-select" [value]="selectedLeagueId()" (change)="onLeagueChange($event)">
+                                <option value="">All Leagues</option>
+                                <option *ngFor="let league of leagues()" [value]="league.id">
+                                    {{ league.name }}
+                                </option>
+                            </select>
+
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                <app-icon name="down" size="lg"></app-icon>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <app-search
+                        placeholder="Search by name, short name…"
+                        (searchChange)="onSearchChange($event)">
+                    </app-search>
+
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-8">
+                <app-team-card
+                    *ngFor="let team of teams() | teamFilter: searchTerm()"
+                    [team]="team"
+                    [readOnly]="true">
+                </app-team-card>
+            </div>
+
+            <div *ngIf="!loading() && (teams() | teamFilter: searchTerm()).length === 0"
+                class="text-center py-16 text-[var(--text-muted)]">
+                No teams found.
+            </div>
+
+        </section>
+    </div>
+</app-shell>

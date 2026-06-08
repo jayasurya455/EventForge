@@ -1,0 +1,50 @@
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 backdrop-blur-md" style="background: rgba(0,0,0,0.55)">
+    </div>
+
+    <!-- Dialog -->
+    <div class="relative w-full max-w-md rounded-3xl shadow-2xl p-8 text-center border" style="
+      background: var(--bg-card);
+      border-color: var(--border);
+      color: var(--text-primary);
+    ">
+        <!-- Accent bar -->
+        <div class="absolute top-0 left-0 w-full h-1"
+            style="background: linear-gradient(to right, transparent, var(--danger), transparent)">
+        </div>
+
+        <!-- Icon -->
+        <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full border" style="
+        background: color-mix(in srgb, var(--danger) 15%, transparent);
+        border-color: var(--danger);
+      ">
+            <app-icon name="danger" size="lg" style="color: var(--danger)"></app-icon>
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-2xl font-bold mb-3">
+            {{ title }}
+        </h2>
+
+        <!-- Message -->
+        <p class="text-sm mb-8" style="color: var(--text-muted)">
+            {{ message }}
+        </p>
+
+        <!-- Actions -->
+        <div class="flex flex-row gap-3">
+            <!-- Confirm -->
+            <app-button variant="outline" color="red" class="flex-1" (clickTriggered)="confirm.emit()">
+                <app-icon name="tick" size="sm"></app-icon>
+                {{ confirmText }}
+            </app-button>
+
+            <!-- Cancel -->
+             <app-button variant="outline" (clickTriggered)="cancel.emit()">
+                <app-icon name="cross" size="sm"></app-icon>
+                {{ cancelText }}
+            </app-button>
+        </div>
+    </div>
+</div>

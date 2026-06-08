@@ -1,0 +1,58 @@
+<div class="ef-auction-step3">
+    <div class="ef-header-row">
+        <div>
+            <h1 class="ef-title">Select Players</h1>
+            <p class="ef-subtitle">
+                Assign eligible players to this auction session.
+            </p>
+        </div>
+        <div class="ef-selected-count">
+            <div
+                class="bg-[#102a24] border border-emerald-500/30 px-4 py-2 rounded-xl flex flex-col items-center min-w-[70px]">
+                <span class="text-emerald-500 font-bold text-xl">{{ selectedPlayers.length }}</span>
+                <span class="text-[9px] font-bold text-emerald-500/70 uppercase tracking-widest">
+                    Selected
+                </span>
+            </div>
+            <app-button variant="outline" (clickTriggered)="toggleSelectAll()">
+                <input type="checkbox" class="ef-checkbox" [checked]="allSelected" />
+                Select All
+            </app-button>
+        </div>
+    </div>
+    <div class="ef-player-grid grid grid-cols-3 gap-8">
+        <ng-container *ngIf="players().length > 0; else noPlayers">
+            <ng-container *ngFor="let player of players()">
+                <app-player-card [player]="player" [readOnly]="true" [selectable]="true" [auctionId]="auctionId"></app-player-card>
+            </ng-container>
+        </ng-container>
+        <ng-template #noPlayers>
+            <div class="col-span-3 text-center py-12 text-gray-500 ef-empty">No players available</div>
+        </ng-template>
+    </div>
+</div>
+
+<footer-action-bar [templateForFooter]="footerTemplate"></footer-action-bar>
+<ng-template #footerTemplate>
+    <span>
+        Step {{ auctionStep + 1 }} of 4
+    </span>
+
+    <div class="ef-footer-actions">
+        <app-button variant="outline" (clickTriggered)="cancel()">
+            <app-icon name="x-circle"></app-icon>
+            Cancel
+        </app-button>
+
+        <app-button variant="outline" (clickTriggered)="prev()">
+            <app-icon name="arrow-circle-left"></app-icon>
+            Previous
+        </app-button>
+
+        <app-button variant="outline" (clickTriggered)="next()">
+            Next
+            <app-icon name="arrow-circle-right"></app-icon>
+        </app-button>
+
+    </div>
+</ng-template>

@@ -1,0 +1,16 @@
+<app-shell>
+    <!-- Top Nav Content -->
+    <app-top-nav [centerTemplate]="aucWizardCenter"></app-top-nav>
+    <ng-template #aucWizardCenter>
+        <app-auction-stepper [steps]="steps" [currentStep]="currentStep()">
+        </app-auction-stepper>
+    </ng-template>
+
+    <!-- Wizard Content -->
+    <div class="ef-wizard">
+        <app-auction-step1 *ngIf="currentStep() === 0"></app-auction-step1>
+        <app-auction-step2 *ngIf="currentStep() === 1"></app-auction-step2>
+        <app-auction-step3 *ngIf="currentStep() === 2"></app-auction-step3>
+        <app-auction-step4 *ngIf="currentStep() === 3"></app-auction-step4>
+    </div>
+</app-shell>

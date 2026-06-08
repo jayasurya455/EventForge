@@ -1,0 +1,18 @@
+<div class="ef-card border-dashed cursor-pointer
+         flex flex-col items-center justify-center
+         text-center gap-2
+         hover:border-[var(--primary)]
+         hover:bg-[rgba(255,255,255,0.02)]
+         transition min-h-[220px]">
+
+    <div class="w-12 h-12 rounded-full
+              flex items-center justify-center
+              bg-[var(--bg-page)]">
+        <app-icon [name]="icon"></app-icon>
+    </div>
+
+    <h3 class="font-semibold">{{ title }}</h3>
+    <p class="text-sm text-[var(--text-muted)]">
+        {{ subtitle }}
+    </p>
+</div>

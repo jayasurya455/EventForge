@@ -1,0 +1,304 @@
+<app-shell>
+    <app-top-nav [leftTemplate]="navLeft" [centerTemplate]="navCenter" [rightTemplate]="navRight">
+    </app-top-nav>
+
+    <ng-template #navLeft>
+        <div class="nav-left">
+            <div class="nav-title">
+                <span class="eyebrow">Live Auction</span>
+                <div class="nav-sub">{{ activeAuction?.Name ?? '—' }}</div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #navCenter>
+        <div class="nav-center">
+            <div class="pill pill-ghost">
+                <span class="dot dot-success"></span>
+                <span>Player {{ playerProgress }}</span>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #navRight>
+        <div class="nav-right">
+            <div class="time-block">
+                <span class="eyebrow">Bid Timer</span>
+                <div class="time">{{ timerDisplay }}</div>
+            </div>
+            <app-button variant="outline" color="green" [disabled]="isProcessing" (clickTriggered)="pausePlayAuction()">
+                <app-icon [name]="isPaused ? 'play-circle' : 'pause-circle'" size="sm"></app-icon>
+                {{ isPaused ? 'Resume' : 'Pause' }}
+            </app-button>
+            <app-button variant="primary" color="red" [disabled]="isProcessing || !!currentPlayer" (clickTriggered)="endAuction()">
+                <app-icon name="call-end" size="sm"></app-icon>
+                End Auction
+            </app-button>
+        </div>
+    </ng-template>
+
+    <!-- Error banner -->
+    <div class="error-banner" *ngIf="errorMessage">
+        <app-icon name="warning" size="sm"></app-icon>
+        {{ errorMessage }}
+        <button class="error-dismiss" (click)="dismissError()">✕</button>
+    </div>
+
+    <div class="live-layout">
+
+        <!-- ── LEFT: Upcoming / Queued Players ── -->
+        <section class="panel upcoming">
+            <div class="panel-header">
+                <div class="panel-title">Upcoming</div>
+                <div class="panel-sub">{{ queuedPlayers.length }} left</div>
+            </div>
+
+            <div class="list" *ngIf="queuedPlayers.length > 0; else noQueued">
+                <div class="list-item"
+                     *ngFor="let player of queuedPlayers; let i = index"
+                     [class.active]="player.PlayerId === currentPlayer?.PlayerId"
+                     [class.clickable]="!currentPlayer && !isProcessing"
+                     (click)="openLot(player)">
+                    <div class="avatar" [ngStyle]="{'background': player.ImageBase ? 'transparent' : getTeamColor(i)}">
+                        <img *ngIf="player.ImageBase" [src]="player.ImageBase" class="avatar-img" [alt]="player.PlayerName">
+                        <span *ngIf="!player.ImageBase">{{ getInitials(player.PlayerName) }}</span>
+                    </div>
+                    <div class="list-meta">
+                        <div class="list-name">{{ player.PlayerName }}</div>
+                        <div class="list-sub">
+                            <span *ngIf="player.PlayerId === currentPlayer?.PlayerId" class="badge-live">● On Lot</span>
+                            <span *ngIf="player.PlayerId !== currentPlayer?.PlayerId">Click to open lot</span>
+                        </div>
+                    </div>
+                    <div class="list-indicator" *ngIf="player.PlayerId === currentPlayer?.PlayerId"></div>
+                </div>
+            </div>
+
+            <ng-template #noQueued>
+                <div class="empty-state" *ngIf="processedPlayers.length === 0">
+                    <app-icon name="check-circle" size="lg"></app-icon>
+                    <div>All players processed</div>
+                </div>
+            </ng-template>
+
+            <!-- Processed history -->
+            <div class="processed-section" *ngIf="processedPlayers.length > 0">
+                <div class="section-divider">Processed · {{ processedPlayers.length }}</div>
+                <div class="list">
+                    <div class="list-item processed-item"
+                         *ngFor="let player of processedPlayers">
+                        <div class="avatar" [ngStyle]="{'background': player.ImageBase ? 'transparent' : '#1e293b'}">
+                            <img *ngIf="player.ImageBase" [src]="player.ImageBase" class="avatar-img" [alt]="player.PlayerName">
+                            <span *ngIf="!player.ImageBase">{{ getInitials(player.PlayerName) }}</span>
+                        </div>
+                        <div class="list-meta">
+                            <div class="list-name">{{ player.PlayerName }}</div>
+                            <div class="list-sub">
+                                <span class="outcome-sold" *ngIf="player.Status === 'Sold'">
+                                    Sold · ₹{{ player.SalePrice | number }} · {{ getWinningTeamName(player) }}
+                                </span>
+                                <span class="outcome-unsold" *ngIf="player.Status === 'Unsold'">Unsold</span>
+                            </div>
+                        </div>
+                        <div class="outcome-dot" [class.dot-sold]="player.Status === 'Sold'" [class.dot-unsold]="player.Status === 'Unsold'"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paused indicator -->
+            <div class="paused-badge" *ngIf="isPaused">
+                <app-icon name="pause-circle" size="sm"></app-icon>
+                Auction Paused
+            </div>
+        </section>
+
+        <!-- ── CENTER: Active Player Card + Actions ── -->
+        <section class="main">
+
+            <!-- No active lot, no last result -->
+            <div class="player-card empty-lot" *ngIf="!currentPlayer && !lastProcessedPlayer">
+                <div class="empty-lot-icon">
+                    <app-icon name="gavel" size="lg"></app-icon>
+                </div>
+                <div class="empty-lot-title">No Active Lot</div>
+                <div class="empty-lot-sub">
+                    <span *ngIf="queuedPlayers.length > 0">Select a player from the list to open bidding</span>
+                    <span *ngIf="queuedPlayers.length === 0">All players have been processed</span>
+                </div>
+            </div>
+
+            <!-- Last processed result card -->
+            <div class="player-card result-card"
+                 [class.result-sold]="lastProcessedStatus === 'Sold'"
+                 [class.result-unsold]="lastProcessedStatus === 'Unsold'"
+                 *ngIf="!currentPlayer && lastProcessedPlayer">
+                <div class="badge"
+                     [class.badge-sold]="lastProcessedStatus === 'Sold'"
+                     [class.badge-unsold]="lastProcessedStatus === 'Unsold'">
+                    {{ lastProcessedStatus === 'Sold' ? 'SOLD' : 'UNSOLD' }}
+                </div>
+                <div class="player-body">
+                    <div class="player-avatar" [class.has-image]="lastProcessedPlayer!.ImageBase">
+                        <img *ngIf="lastProcessedPlayer!.ImageBase" [src]="lastProcessedPlayer!.ImageBase" class="player-avatar-img" [alt]="lastProcessedPlayer!.PlayerName">
+                        <span *ngIf="!lastProcessedPlayer!.ImageBase">{{ getInitials(lastProcessedPlayer!.PlayerName) }}</span>
+                    </div>
+                    <div class="player-name">{{ lastProcessedPlayer!.PlayerName }}</div>
+                    <div class="result-outcome" *ngIf="lastProcessedStatus === 'Sold'">
+                        <div class="result-amount">₹{{ lastProcessedAmount | number }}</div>
+                        <div class="result-team">Sold to <strong>{{ lastProcessedTeamName }}</strong></div>
+                    </div>
+                    <div class="result-outcome unsold-outcome" *ngIf="lastProcessedStatus === 'Unsold'">
+                        <div class="result-unsold-label">No bids — Player unsold</div>
+                    </div>
+                    <div class="open-next-hint" *ngIf="queuedPlayers.length > 0">
+                        <app-icon name="arrow-circle-right" size="sm"></app-icon>
+                        Select next player from the list to open bidding
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active player card -->
+            <div class="player-card" *ngIf="currentPlayer">
+                <div class="badge">Lot up for auction</div>
+                <div class="player-body">
+                    <div class="player-avatar" [class.has-image]="currentPlayer.ImageBase && !avatarError">
+                        <img *ngIf="currentPlayer.ImageBase && !avatarError"
+                             [src]="currentPlayer.ImageBase"
+                             class="player-avatar-img"
+                             [alt]="currentPlayer.PlayerName"
+                             (error)="onAvatarError()">
+                        <span *ngIf="!currentPlayer.ImageBase || avatarError">{{ getInitials(currentPlayer.PlayerName) }}</span>
+                    </div>
+                    <div class="player-name">{{ currentPlayer.PlayerName }}</div>
+                    <div class="player-meta">
+                        <span class="status-pill status-active">Active Lot</span>
+                    </div>
+                    <div class="bid-block" [class.no-bid]="currentBid === 0">
+                        <div class="eyebrow">Current Bid</div>
+                        <div class="bid-amount" [class.bid-zero]="currentBid === 0">
+                            {{ currentBid === 0 ? 'No bids yet' : ('₹' + (currentBid | number)) }}
+                        </div>
+                        <div class="bid-team" *ngIf="currentLeadingTeam">
+                            Leading: <strong>{{ currentLeadingTeam.TeamName }}</strong>
+                        </div>
+                        <div class="bid-team muted" *ngIf="!currentLeadingTeam">
+                            Waiting for first bid
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions" *ngIf="currentPlayer">
+                <!-- Team selector hint -->
+                <div class="action-hint" *ngIf="!selectedTeamId">
+                    <app-icon name="arrow-circle-right" size="sm"></app-icon>
+                    Select a team from the right panel, then choose a bid increment
+                </div>
+                <div class="selected-team-tag" *ngIf="selectedTeam">
+                    Bidding for: <strong>{{ selectedTeam.TeamName }}</strong>
+                    <button class="clear-team" (click)="selectTeam(selectedTeam!)">✕</button>
+                </div>
+
+                <!-- Quick bid increments -->
+                <div class="quick-bids">
+                    <div class="quick-pill"
+                         *ngFor="let inc of quickBidIncrements; let i = index"
+                         [class.disabled]="!canPlaceBid"
+                         [ngStyle]="{'background': canPlaceBid ? getTeamColor(i + 3) : 'rgba(255,255,255,0.05)'}"
+                         (click)="placeBid(inc)">
+                        +{{ inc >= 1000 ? (inc / 1000) + 'K' : inc }}
+                        <span class="quick-sub">Quick Bid</span>
+                    </div>
+                </div>
+
+                <!-- Final actions -->
+                <div class="final-actions">
+                    <app-button variant="primary" color="green" class="grow-btn"
+                        [disabled]="!canSell"
+                        (clickTriggered)="sellCurrentPlayer()">
+                        <app-icon name="check-circle"></app-icon>
+                        Sold — ₹{{ currentBid | number }}
+                    </app-button>
+                    <app-button variant="outline" color="red" class="grow-btn"
+                        [disabled]="!canMarkUnsold"
+                        (clickTriggered)="markUnsold()">
+                        <app-icon name="x-circle"></app-icon>
+                        Unsold / Next
+                    </app-button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── RIGHT: Bid Info + Timer + Teams ── -->
+        <section class="panel sidebar">
+
+            <!-- Current highest bid -->
+            <div class="activity">
+                <div class="panel-header">
+                    <div class="panel-title">Current Highest Bid</div>
+                    <div class="panel-sub">Updated live</div>
+                </div>
+                <div class="activity-item highlight" *ngIf="currentLeadingTeam; else noBids">
+                    <div>
+                        <div class="activity-team">{{ currentLeadingTeam.TeamName }}</div>
+                        <div class="activity-meta">Leading bid</div>
+                    </div>
+                    <div class="activity-amount by-you">₹{{ currentBid | number }}</div>
+                </div>
+                <ng-template #noBids>
+                    <div class="activity-item">
+                        <div class="activity-meta">No bids placed yet</div>
+                    </div>
+                </ng-template>
+            </div>
+
+            <!-- Timer -->
+            <div class="timer-card">
+                <div class="timer-label">Bid Timer</div>
+                <div class="timer-value">{{ timerDisplay }}</div>
+                <div class="timer-bar">
+                    <div class="timer-bar-fill" [ngStyle]="{'width': timerPercent + '%'}"></div>
+                </div>
+                <div class="timer-sub">seconds remaining</div>
+            </div>
+
+            <!-- Quick team selection -->
+            <div class="quick-teams">
+                <div class="panel-header">
+                    <div class="panel-title">Select Team to Bid</div>
+                </div>
+                <div class="team-list">
+                    <div class="team-card"
+                         *ngFor="let team of auctionTeams; let i = index"
+                         [class.leader]="isLeadingTeam(team)"
+                         [class.selected]="isSelectedTeam(team)"
+                         [class.clickable]="!!currentPlayer"
+                         (click)="selectTeam(team)">
+                        <div class="team-avatar" [ngStyle]="{'background': team.ImageBase ? 'transparent' : getTeamColor(i)}">
+                            <img *ngIf="team.ImageBase" [src]="team.ImageBase" class="team-avatar-img" [alt]="team.TeamName">
+                            <span *ngIf="!team.ImageBase">{{ getInitials(team.TeamName) }}</span>
+                        </div>
+                        <div class="team-info">
+                            <div class="team-name">{{ team.TeamName }}</div>
+                            <div class="team-sub">₹{{ getBudgetRemaining(team) | number }} left</div>
+                        </div>
+                        <div class="team-right">
+                            <div class="team-status leading" *ngIf="isLeadingTeam(team)">Leading</div>
+                            <div class="team-status selected-tag" *ngIf="isSelectedTeam(team) && !isLeadingTeam(team)">Selected</div>
+                            <app-icon *ngIf="isSelectedTeam(team)" name="check-circle" size="sm" class="check-icon"></app-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Undo placeholder -->
+            <div class="undo">
+                <app-button variant="outline" class="grow-btn" [disabled]="true">
+                    <app-icon name="undo"></app-icon>
+                    Undo Last Action
+                </app-button>
+            </div>
+        </section>
+    </div>
+</app-shell>

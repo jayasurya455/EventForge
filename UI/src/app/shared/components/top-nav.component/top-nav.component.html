@@ -1,0 +1,33 @@
+<header class="sticky top-0 z-40 bg-[var(--app-bg)]/80 backdrop-blur border-b border-[var(--border-subtle)]">
+    <div class="mx-auto px-12 h-16 flex items-center justify-between">
+
+        <!-- LEFT -->
+        <ng-container [ngTemplateOutlet]="leftTemplate || leftDefaultTemplate"></ng-container>
+        <ng-template #leftDefaultTemplate>
+            <div class="flex flex-col leading-tight" (click)="router.navigate(['/'])" style="cursor: pointer;">
+                <span class="text-lg font-semibold">Event Forge</span>
+                <span class="text-xs uppercase tracking-widest opacity-60">
+                    Auction Management
+                </span>
+            </div>
+        </ng-template>
+
+        <!-- CENTER (no default) -->
+        <div class="flex-1 flex justify-center" *ngIf="centerTemplate">
+            <ng-container [ngTemplateOutlet]="centerTemplate"></ng-container>
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="flex items-center gap-3">
+            <ng-container [ngTemplateOutlet]="rightTemplate"></ng-container>
+            <button class="ef-theme-toggle" [class.dark]="isDarkTheme() == true" (click)="toggleTheme()"
+                aria-label="Toggle theme">
+                <div class="ef-theme-toggle-thumb">
+                    <app-icon [name]="isDarkTheme() == true ? 'dark' : 'light'" size="sm">
+                    </app-icon>
+                </div>
+            </button>
+        </div>
+    </div>
+</header>

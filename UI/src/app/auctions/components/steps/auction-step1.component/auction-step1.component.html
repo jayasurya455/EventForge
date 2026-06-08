@@ -1,0 +1,50 @@
+<div class="ef-auction-step1">
+
+    <div class="ef-card form-card">
+
+        <!-- Header -->
+        <div class="form-header flex items-center gap-4 mb-4">
+            <div>
+                <h2 class="text-lg font-semibold">{{ mode === 'Create' ? 'Start Auction' : 'Edit Auction' }}</h2>
+                <p class="text-sm text-[var(--text-muted)]">Set the name and date for your new auction session.</p>
+            </div>
+        </div>
+
+        <div class="field-row">
+            <label>Auction Name</label>
+            <input type="text" class="field-input" placeholder="e.g. IPL Auction 2026" [(ngModel)]="auctionName" />
+        </div>
+
+        <div class="field-row">
+            <label>Schedule Date</label>
+            <app-date-picker [(ngModel)]="auctionDate"></app-date-picker>
+        </div>
+
+        <div class="field-row">
+            <label>Budget Per team</label>
+            <input type="number" class="field-input" placeholder="e.g. 10000" [(ngModel)]="auctionBudget" />
+        </div>
+
+    </div>
+
+</div>
+
+<footer-action-bar [templateForFooter]="footerTemplate"></footer-action-bar>
+<ng-template #footerTemplate>
+    <span>
+        Step {{ auctionStep + 1 }} of 4
+    </span>
+
+    <div class="ef-footer-actions">
+        <app-button variant="outline" (clickTriggered)="cancel()">
+            <app-icon name="x-circle"></app-icon>
+            Cancel
+        </app-button>
+
+        <app-button variant="outline" (clickTriggered)="nextStep()">
+            Next
+            <app-icon name="arrow-circle-right"></app-icon>
+        </app-button>
+
+    </div>
+</ng-template>

@@ -1,0 +1,50 @@
+.ef-auction-step2 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ef-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.ef-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ef-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.ef-selected-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ef-selected-number {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.ef-team-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .ef-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ef-selected-count {
+    align-self: flex-start;
+  }
+}

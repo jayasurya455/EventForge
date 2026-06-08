@@ -1,0 +1,58 @@
+<app-shell>
+    <app-top-nav></app-top-nav>
+
+    <div class="ef-card league-form-card">
+
+        <div class="form-header flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center
+           bg-gradient-to-br from-purple-500 to-pink-500">
+                <app-icon name="trophy"></app-icon>
+            </div>
+
+            <div>
+                <h2 class="text-lg font-semibold"> {{ mode === 'create' ? 'Create New League' : 'Edit League' }}</h2>
+                <p class="text-sm text-[var(--text-muted)]">Set up a new auction league</p>
+            </div>
+        </div>
+
+        <!-- Image Placeholder -->
+        <form-logo [urlPath]="logoPath" [logobase64]="logoImage" (logoSelectedPath)="updateLogoPath($event)"></form-logo>
+
+
+        <!-- Fields -->
+        <div class="form-grid">
+
+            <div class="field-row">
+                <label>League Name</label>
+                <input #leagueName type="text" placeholder="e.g. Premier League 2026" class="field-input" />
+            </div>
+
+            <div class="field-row">
+                <label>Season / Description</label>
+                <input #description type="text" placeholder="e.g. Spring Championship" class="field-input" />
+            </div>
+
+            <div class="field-row">
+                <label>Number of Teams</label>
+                <input #totalTeams type="number" placeholder="8" class="field-input" />
+            </div>
+
+            <div class="field-row">
+                <label>Maximum Players per team</label>
+                <input #playersPerTeam type="number" placeholder="11" class="field-input" />
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="form-footer">
+            <app-button variant="primary" (clickTriggered)="callLeague()">
+                {{ mode === 'create' ? 'Create League' : 'Update League' }}
+            </app-button>
+
+            <app-button variant="outline" (clickTriggered)="cancel()">
+                <p class="w-full text-center">Cancel</p>
+            </app-button>
+        </div>
+
+    </div>
+</app-shell>

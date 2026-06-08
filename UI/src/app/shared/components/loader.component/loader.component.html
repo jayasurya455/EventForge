@@ -1,0 +1,21 @@
+<div class="fixed inset-0 z-[200] flex items-center justify-center">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 backdrop-blur-md" style="background: rgba(0,0,0,0.55)">
+    </div>
+
+    <!-- Loader Card -->
+    <div class="loader-card rounded-2xl px-8 py-6 flex items-center gap-4 border shadow-xl">
+        <!-- Spinner -->
+        <svg class="animate-spin h-6 w-6" viewBox="0 0 24 24" style="color: var(--primary)">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none">
+            </circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+            </path>
+        </svg>
+
+        <!-- Text -->
+        <span class="text-sm font-semibold">
+            {{ message }}
+        </span>
+    </div>
+</div>

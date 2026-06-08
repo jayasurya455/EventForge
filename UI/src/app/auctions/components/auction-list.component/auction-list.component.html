@@ -1,0 +1,150 @@
+<app-shell>
+    <app-top-nav [leftTemplate]="auctionLeft" [rightTemplate]="auctionRight">
+    </app-top-nav>
+    <ng-template #auctionLeft>
+        <a class="inline-flex items-center text-sm font-medium text-slate-400 hover:text-white transition-colors gap-2 cursor-pointer back"
+            (click)="backToLeagues()">
+            <app-icon name="arrow-circle-left" size="sm"></app-icon>
+            Back to Leagues
+        </a>
+    </ng-template>
+    <ng-template #auctionRight>
+        <app-button variant="primary" (clickTriggered)="createAuction()">
+            <app-icon name="add"></app-icon>
+            Create Auction
+        </app-button>
+    </ng-template>
+
+    <div class="mx-auto px-6 lg:px-10 py-8">
+
+        <!-- League Header -->
+        <header class="page__hero">
+            <div class="page__hero-left">
+                <div class="title">
+                    <div class="title__icon">
+                        <app-icon name="trophy"></app-icon>
+                    </div>
+                    <div>
+                        <h1>Auctions</h1>
+                        <p>League: {{ league()?.name || 'All' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page__hero-right">
+                <div class="tabs">
+                    <button class="tab" (click)="setTab('AUCTIONS')"
+                        [class.active]="activeTab() === 'AUCTIONS'">Auctions</button>
+                    <button class="tab" (click)="setTab('SQUADS')"
+                        [class.active]="activeTab() === 'SQUADS'">Squads</button>
+                </div>
+            </div>
+        </header>
+
+        <ng-container [ngSwitch]="activeTab()">
+
+            <!-- AUCTIONS TAB -->
+            <ng-container *ngSwitchCase="'AUCTIONS'">
+                <div class="tab-panel slide-left flex gap-24">
+
+                    <!-- Grid -->
+                    <section class="flex-1">
+                        <h3 class="mb-5 text-sm font-semibold uppercase tracking-wide opacity-70">
+                            Manage and monitor all auction sessions
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <ng-container *ngFor="let a of auctions()">
+                                <app-auction-card [title]="a?.Name ?? ''"
+                                    [subtitle]="a?.ScheduledAt ? ('Scheduled: ' + (a?.ScheduledAt | date:'medium')) : 'Live/Unscheduled'"
+                                    [status]="(a?.Status || '').toUpperCase()" [auctionId]="a?.AuctionId ?? ''"
+                                    [auction]="a">
+                                </app-auction-card>
+                            </ng-container>
+                        </div>
+                    </section>
+
+                    <!-- RIGHT: Quick Stats -->
+                    <aside class="w-[360px] shrink-0">
+                        <div class="sticky top-32 flex flex-col gap-4">
+                            <h3 class="text-sm font-semibold uppercase tracking-wide opacity-70">
+                                Quick Stats
+                            </h3>
+
+                            <!-- Loading -->
+                            <ng-container *ngIf="statsLoading()">
+                                <div class="stats-placeholder">
+                                    <app-icon name="settings" size="lg"></app-icon>
+                                    <p>Loading stats…</p>
+                                </div>
+                            </ng-container>
+
+                            <!-- Real stats -->
+                            <ng-container *ngIf="hasStats()">
+                                <app-stat-card icon="gavel" label="Total Auctions"
+                                    [value]="leagueStats()!.TotalAuctions">
+                                </app-stat-card>
+                                <app-stat-card icon="groups" label="Teams Involved" [value]="leagueStats()!.TotalTeams">
+                                </app-stat-card>
+                                <app-stat-card icon="search-person" label="Players Involved"
+                                    [value]="leagueStats()!.TotalPlayers">
+                                </app-stat-card>
+                                <app-stat-card icon="wallet" label="Total Spent"
+                                    [value]="formatMoney(leagueStats()!.TotalSpent)">
+                                </app-stat-card>
+                            </ng-container>
+                        </div>
+                    </aside>
+                </div>
+            </ng-container>
+
+            <!-- SQUADS TAB -->
+            <div class="tab-panel slide-right" *ngSwitchCase="'SQUADS'">
+                <h3 class="mb-5 text-sm font-semibold uppercase tracking-wide opacity-70">
+                    Select an auction to view its squad results
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="ef-card p-6 squad-select-card" *ngFor="let a of auctions()"
+                        [class.completed]="(a?.Status || '').toUpperCase() === 'COMPLETED'" (click)="viewSquads(a)">
+                        <div class="flex justify-between items-start mb-4">
+                            <app-icon
+                                [name]="(a?.Status || '').toUpperCase() === 'COMPLETED' ? 'check-circle' : 'groups'"
+                                [ngClass]="{
+                                    'text-emerald-500': (a?.Status || '').toUpperCase() === 'COMPLETED',
+                                    'text-slate-500': (a?.Status || '').toUpperCase() !== 'COMPLETED'
+                                }">
+                            </app-icon>
+                            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                                [ngClass]="{
+                                    'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30': (a?.Status || '').toUpperCase() === 'COMPLETED',
+                                    'bg-slate-500/10 text-slate-400 border border-slate-500/30': (a?.Status || '').toUpperCase() !== 'COMPLETED'
+                                }">
+                                {{ a?.Status }}
+                            </span>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-1">{{ a?.Name }}</h4>
+                        <p class="text-slate-500 text-xs mb-5">
+                            {{ a?.ScheduledAt ? ('Scheduled: ' + (a?.ScheduledAt | date:'medium')) : 'No schedule set'
+                            }}
+                        </p>
+                        <div class="view-squads-row">
+                            <app-icon name="arrow-circle-right" size="sm"
+                                [ngClass]="{'text-emerald-400': (a?.Status || '').toUpperCase() === 'COMPLETED', 'text-slate-500': (a?.Status || '').toUpperCase() !== 'COMPLETED'}">
+                            </app-icon>
+                            <span
+                                [ngClass]="{'text-emerald-400': (a?.Status || '').toUpperCase() === 'COMPLETED', 'text-slate-500': (a?.Status || '').toUpperCase() !== 'COMPLETED'}">
+                                {{ (a?.Status || '').toUpperCase() === 'COMPLETED' ? 'View Squads' : 'Not yet completed'
+                                }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ef-card p-6 flex items-center justify-center text-slate-500 text-sm"
+                        *ngIf="auctions().length === 0">
+                        No auctions found for this league.
+                    </div>
+                </div>
+            </div>
+
+        </ng-container>
+    </div>
+
+</app-shell>
