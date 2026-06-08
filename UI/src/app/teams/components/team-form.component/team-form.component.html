@@ -1,0 +1,69 @@
+<app-shell>
+    <app-top-nav></app-top-nav>
+
+    <div class="page-container">
+        <div class="ef-card team-form-card">
+
+            <!-- Header -->
+            <div class="form-header flex items-center gap-4 mb-4">
+                <div
+                    class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-green-500 to-green-300">
+                    <app-icon name="groups"></app-icon>
+                </div>
+
+                <div>
+                    <h2 class="text-lg font-semibold">{{ mode === 'create' ? 'Add New Team' : 'Edit Team' }}</h2>
+                    <p class="text-sm text-[var(--text-muted)]">Register a team for the auction</p>
+                </div>
+            </div>
+
+            <!-- Logo -->
+            <form-logo [urlPath]="logoPath" [logobase64]="logoImage" (logoSelectedPath)="updateLogoPath($event)"></form-logo>
+
+            <!-- Fields -->
+            <div class="form-grid">
+
+                <!-- Team Name -->
+                <div class="field-row">
+                    <label>Short Name</label>
+                    <input type="text" class="field-input" [(ngModel)]="teamShortName" placeholder="e.g. TK or Kings" />
+                </div>
+
+                <div class="field-row">
+                    <label>Name</label>
+                    <input type="text" class="field-input" [(ngModel)]="teamName" placeholder="e.g. Thunder Kings" />
+                </div>
+
+                <!-- Budget -->
+                <div class="field-row">
+                    <label>Budget</label>
+                    <input type="number" class="field-input" placeholder="e.g. 5000" [(ngModel)]="budget" />
+                </div>
+
+                <!-- Team Color -->
+                <div class="field-row">
+                    <label>Team Color</label>
+                    <span class="flex items-center gap-2">
+                        <input type="color" [(ngModel)]="selectedColor" class="w-8 h-8 rounded cursor-pointer" />
+                        <label>click on the picker to choose a color</label>
+                    </span>
+                    <input type="text" class="field-input" [(ngModel)]="selectedColor" placeholder="#3B82F6" (input)="onHexInput($event)" />
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="form-footer">
+                <app-button variant="primary" color="green" (clickTriggered)="callTeam()">
+                    {{ mode === 'create' ? 'Add' : 'Save' }}
+                </app-button>
+
+                <app-button variant="outline" (clickTriggered)="cancel()">
+                    <span class="w-full text-center">Cancel</span>
+                </app-button>
+            </div>
+
+        </div>
+    </div>
+
+</app-shell>

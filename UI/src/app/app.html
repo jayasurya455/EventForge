@@ -1,0 +1,84 @@
+<!-- <app-shell>
+  <div class="w-full px-12">
+    <section class="rounded-3xl bg-[var(--surface-1)] p-8">
+      <div class="flex gap-24">
+
+        <section class="flex-1">
+          <header class="mb-10">
+            <h2 class="text-2xl font-semibold mb-1">Leagues</h2>
+          </header>
+
+          <div class="grid grid-cols-2 gap-8">
+            <league-card class="selected" title="Premier League 2026" subtitle="Spring Championship" [teams]="4" [players]="5"
+              status="LIVE">
+            </league-card>
+
+            <league-card title="Champions Trophy" subtitle="Winter Season" [teams]="8" [players]="120"
+              status="SCHEDULED">
+            </league-card>
+
+            <app-action-card icon="add" title="Create New League" subtitle="Set up a new auction event">
+            </app-action-card>
+
+          </div>
+        </section>
+
+        <aside class="w-[360px] shrink-0">
+          <div class="sticky top-32 flex flex-col gap-4">
+            <h3 class="text-sm font-semibold uppercase tracking-wide opacity-70">
+              Quick Stats
+            </h3>
+
+            <app-stat-card icon="gavel" label="Total Auctions" value="12"></app-stat-card>
+            <app-stat-card icon="groups" label="Active Players" value="245"></app-stat-card>
+            <app-stat-card icon="wallet" label="Total Spend" value="$1.2M"></app-stat-card>
+            <app-stat-card icon="trophy" label="Championships" value="3"></app-stat-card>
+          </div>
+        </aside>
+
+
+      </div>
+    </section>
+  </div>
+
+
+
+
+  <div>
+    <div class="p-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+
+      <league-card title="Premier League 2026" subtitle="Spring Championship" [teams]="4" [players]="5" status="LIVE">
+      </league-card>
+
+      <league-card title="Champions Trophy" subtitle="Winter Season" [teams]="8" [players]="120" status="SCHEDULED">
+      </league-card>
+
+      <app-action-card icon="add" title="Create New League" subtitle="Set up a new auction event">
+      </app-action-card>
+
+    </div>
+    <div class="mt-10 ">
+      <h2 class="text-xl font-semibold mb-4">
+        Quick Stats
+      </h2>
+
+      <div class="flex flex-wrap gap-4">
+        <app-stat-card icon="gavel" label="Total Auctions" value="12">
+        </app-stat-card>
+
+        <app-stat-card icon="groups" label="Active Players" value="245">
+        </app-stat-card>
+
+        <app-stat-card icon="wallet" label="Total Spend" value="$1.2M">
+        </app-stat-card>
+
+        <app-stat-card icon="trophy" label="Championships" value="3">
+        </app-stat-card>
+      </div>
+    </div>
+  </div>
+
+
+
+</app-shell> -->
+<router-outlet></router-outlet>

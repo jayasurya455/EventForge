@@ -1,0 +1,5 @@
+<span *ngIf="name != 'custom'; else imageIcon" class="ef-icon" [innerHTML]="svgContent"></span>
+
+<ng-template #imageIcon>
+    <img class="ef-icon logo-img" [src]="imageLogo" alt="League Logo" class="logo-img" />
+</ng-template>

@@ -1,0 +1,7 @@
+<button class=" flex-1 inline-flex justify-center items-center ef-btn cursor-pointer" [ngClass]="[
+    'ef-btn-' + variant,
+    color != null ? 'ef-color-' + color : '',
+    disabled ? 'opacity-60' : ''
+  ]" (click)="onClick()" [disabled]="disabled">
+  <ng-content></ng-content>
+</button>

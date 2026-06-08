@@ -1,0 +1,21 @@
+<div class="logo-row">
+    <div class="logo-preview">
+        <img *ngIf="logoImage; else placeholder" [src]="logoImage" alt="League Logo" class="logo-img" />
+
+        <ng-template #placeholder>
+            <div class="logo-placeholder">
+                <app-icon name="groups"></app-icon>
+            </div>
+        </ng-template>
+    </div>
+
+    <div class="logo-column">
+        <app-button variant="outline" (clickTriggered)="pickLeagueLogo()">
+            <app-icon name="upload"></app-icon>
+            Upload Logo
+        </app-button>
+        <p class="logo-hint">
+            Supported formats: PNG, JPG
+        </p>
+    </div>
+</div>

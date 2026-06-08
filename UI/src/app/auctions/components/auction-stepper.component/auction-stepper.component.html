@@ -1,0 +1,19 @@
+<div class="ef-stepper">
+    <ng-container *ngFor="let step of steps; let i = index">
+        <div class="ef-step" [class.completed]="i < currentStep" [class.active]="i === currentStep"
+            [class.last]="i === steps.length - 1">
+            <div class="ef-step-circle">
+                <ng-container *ngIf="i < currentStep; else iconBlock">
+                    ✓
+                </ng-container>
+
+                <ng-template #iconBlock>
+                    <app-icon [name]="step.icon"></app-icon>
+                </ng-template>
+            </div>
+
+            <span class="ef-step-label">{{ step.label }}</span>
+        </div>
+        <div *ngIf="i < steps.length - 1" class="ef-step-line" [class.completed]="i < currentStep"></div>
+    </ng-container>
+</div>

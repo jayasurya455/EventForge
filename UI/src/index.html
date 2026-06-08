@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    let _pendingCalls = new Map();
+    let _nextCallId = 1;
+
+    window.__eventForgeResolve = function (callId, result) {
+      const resolve = _pendingCalls.get(callId);
+      if (resolve) {
+        _pendingCalls.delete(callId);
+        resolve(result);
+      }
+    };
+
+    window.EventForge = {
+      invoke: function (method, payload) {
+        return new Promise((resolve) => {
+          const callId = _nextCallId++;
+          _pendingCalls.set(callId, resolve);
+          const encoded = encodeURIComponent(JSON.stringify(payload || null));
+          window.location.href =
+            `eventforge://invoke?callId=${callId}&method=${method}&payload=${encoded}`;
+        });
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>

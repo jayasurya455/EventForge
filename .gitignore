@@ -1,0 +1,17 @@
+# .NET build artifacts
+MAUI/**/bin/
+MAUI/**/obj/
+
+# MAUI integrated Angular output — regenerate with: cd UI && npm run build:maui
+MAUI/EventForge/Resources/Raw/wwwroot/
+
+# Claude Code (machine-specific settings)
+.claude/settings.local.json
+
+# Visual Studio
+.vs/
+*.user
+
+# OS
+.DS_Store
+Thumbs.db

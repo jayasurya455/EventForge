@@ -1,0 +1,51 @@
+<app-loader *ngIf="loading()" message="Loading players..."></app-loader>
+<app-shell>
+    <app-top-nav [rightTemplate]="rightTemplate"></app-top-nav>
+    <ng-template #rightTemplate>
+        <app-button variant="primary" color="blue" (clickTriggered)="navigateToCreatePlayer()">
+            <app-icon name="add"></app-icon>
+            Add New Player
+        </app-button>
+    </ng-template>
+    <div class="w-full px-12 pb-28">
+        <section class="rounded-3xl bg-[var(--surface-1)] p-8">
+
+            <!-- Header -->
+            <header class="mb-8 flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-semibold">Players Management</h2>
+                    <p class="text-sm text-[var(--text-muted)]">
+                        Manage league players and auction status
+                    </p>
+                </div>
+            </header>
+
+            <!-- Filters -->
+            <div class="mb-10 rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-5">
+                <app-search
+                    label="Search Players"
+                    placeholder="Search by name, area, role…"
+                    (searchChange)="onSearchChange($event)">
+                </app-search>
+            </div>
+
+            <!-- Players Grid -->
+            <div class="grid grid-cols-4 gap-8">
+                <app-player-card
+                    *ngFor="let player of players() | playerFilter: searchTerm()"
+                    [player]="player"
+                    [readOnly]="true">
+                </app-player-card>
+            </div>
+
+            <div *ngIf="!loading() && (players() | playerFilter: searchTerm()).length === 0"
+                class="text-center py-16 text-[var(--text-muted)]">
+                No players found.
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Bulk Action Bar -->
+    <!-- <footer-action-bar></footer-action-bar> -->
+</app-shell>

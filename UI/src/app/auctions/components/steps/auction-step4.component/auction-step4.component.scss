@@ -1,0 +1,170 @@
+.ef-auction-step4 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ef-review-container {
+  display: flex;
+  justify-content: center;
+}
+
+.ef-review-card {
+  width: 100%;
+  max-width: 1080px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ef-review-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ef-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ef-section-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.ef-review-details-box {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.06), rgba(96, 165, 250, 0.08));
+  border: 1px solid var(--border);
+}
+
+.ef-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.ef-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.ef-step-line-horizontal {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 0.5rem 0;
+}
+
+.ef-review-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.ef-stat-box {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.1rem 1.25rem;
+  background: var(--surface);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.ef-stat-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.ef-value-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.ef-value-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.12);
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+}
+
+.ef-small-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.ef-stat-center {
+  text-align: right;
+}
+
+.ef-stat-number {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.ef-stat-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.ef-info-box {
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  background: rgba(96, 165, 250, 0.12);
+  color: var(--text-primary);
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.ef-info-box p {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.session-box {
+  flex: 1.04;
+  border-right: 1px solid var(--text-muted);
+}
+
+.date-box {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ef-review-card {
+    padding: 1.25rem;
+  }
+
+  .ef-stat-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ef-stat-center {
+    text-align: left;
+  }
+}

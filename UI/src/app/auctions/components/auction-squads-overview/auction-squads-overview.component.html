@@ -1,0 +1,129 @@
+<app-shell>
+  <app-top-nav [leftTemplate]="squadLeft" [rightTemplate]="squadRight">
+  </app-top-nav>
+
+  <ng-template #squadLeft>
+    <a class="inline-flex items-center text-sm font-medium text-slate-400 hover:text-white transition-colors gap-2 cursor-pointer back"
+      (click)="goBack()">
+      <app-icon name="arrow-circle-left" size="sm"></app-icon>
+      Back to Auctions
+    </a>
+  </ng-template>
+
+  <ng-template #squadRight>
+    <button class="bulk-btn" (click)="expandCollapseAll()">
+      <app-icon name="down" [class.rotated]="isAllCollapsed"></app-icon>
+      <span>{{ isAllCollapsed ? 'Expand All' : 'Collapse All' }}</span>
+    </button>
+  </ng-template>
+
+  <div class="mx-auto px-6 lg:px-10 py-8">
+
+    <!-- Page Header -->
+    <header class="page__hero">
+      <div class="title">
+        <div class="title__icon">
+          <app-icon name="groups"></app-icon>
+        </div>
+        <div>
+          <h1>Squad Results</h1>
+          <p class="auction-label">{{ auctionName || 'Loading…' }}</p>
+        </div>
+      </div>
+
+      <!-- Summary Pills -->
+      <div class="summary-pills" *ngIf="!isLoading && squads.length > 0">
+        <div class="stat-pill">
+          <div class="stat-pill__label">Teams</div>
+          <div class="stat-pill__value accent">{{ squads.length }}</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill__label">Players Sold</div>
+          <div class="stat-pill__value">{{ totalSold }}</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill__label">Total Spent</div>
+          <div class="stat-pill__value accent">{{ formatMoney(totalSpent) }}</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Loading -->
+    <div class="empty-state" *ngIf="isLoading">
+      <app-icon name="settings" size="lg"></app-icon>
+      <p>Loading squads…</p>
+    </div>
+
+    <!-- Empty -->
+    <div class="empty-state" *ngIf="!isLoading && squads.length === 0">
+      <app-icon name="groups" size="lg"></app-icon>
+      <p>No squad data available for this auction.</p>
+    </div>
+
+    <!-- Squad Cards -->
+    <div class="page" *ngIf="!isLoading && squads.length > 0">
+      <section class="squad-card" *ngFor="let squad of squads">
+        <div class="squad__header">
+          <div class="squad__left">
+            <div class="badge" [style.background]="squad.accent">
+              <span>{{ squad.rank }}</span>
+            </div>
+            <div class="squad__meta">
+              <div class="squad__name">
+                <span>{{ squad.name }}</span>
+                <span class="tag" *ngIf="squad.rank === 1">Top Spender</span>
+              </div>
+              <div class="squad__sub">
+                <span>{{ squad.playersCount }} {{ squad.playersCount === 1 ? 'Player' : 'Players' }}</span>
+                <span>•</span>
+                <span>Spent: {{ formatMoney(squad.spent) }}</span>
+                <span>•</span>
+                <span>Rem: {{ formatMoney(squad.remaining) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="squad__right">
+            <div class="progress">
+              <div class="progress__label">Budget Utilization · {{ squad.utilization }}%</div>
+              <div class="progress__bar">
+                <div class="progress__fill" [style.width.%]="squad.utilization"
+                  [style.background]="squad.accent"></div>
+              </div>
+            </div>
+            <button class="ghost-btn" (click)="toggleCollapse(squad)" [attr.aria-expanded]="!squad.collapsed">
+              <app-icon name="down" [class.rotated]="!squad.collapsed"></app-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="squad__body" [class.collapsed]="squad.collapsed">
+          <div class="players" *ngIf="!squad.collapsed">
+
+            <!-- Empty squad -->
+            <div class="no-players" *ngIf="squad.players.length === 0">
+              No players acquired in this auction.
+            </div>
+
+            <div class="player" *ngFor="let player of squad.players">
+              <div class="player__avatar-wrap">
+                <div class="avatar-initials" [style.background]="squad.accent">
+                  {{ player.name.charAt(0).toUpperCase() }}
+                </div>
+              </div>
+              <div class="player__info">
+                <div class="player__name">{{ player.name }}</div>
+              </div>
+              <div class="player__price-block">
+                <div class="label">Sold For</div>
+                <div class="value success">{{ formatMoney(player.soldPrice) }}</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</app-shell>

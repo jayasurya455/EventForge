@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36705.20
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventForge", "EventForge\EventForge.csproj", "{756D6B96-544A-4FD8-8799-CB44FD760A4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventForge.Domain", "EventForge.Domain\EventForge.Domain.csproj", "{AD4C1695-9B8D-498F-AEB4-7041E03BE19B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{756D6B96-544A-4FD8-8799-CB44FD760A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756D6B96-544A-4FD8-8799-CB44FD760A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756D6B96-544A-4FD8-8799-CB44FD760A4A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{756D6B96-544A-4FD8-8799-CB44FD760A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756D6B96-544A-4FD8-8799-CB44FD760A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756D6B96-544A-4FD8-8799-CB44FD760A4A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AD4C1695-9B8D-498F-AEB4-7041E03BE19B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD4C1695-9B8D-498F-AEB4-7041E03BE19B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD4C1695-9B8D-498F-AEB4-7041E03BE19B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD4C1695-9B8D-498F-AEB4-7041E03BE19B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09C04E10-0535-4C6D-8CC6-FD1C2F730B8F}
+	EndGlobalSection
+EndGlobal

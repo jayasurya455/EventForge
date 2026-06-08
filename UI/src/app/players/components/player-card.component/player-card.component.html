@@ -1,0 +1,85 @@
+<div class="ef-card relative flex flex-col justify-between
+         rounded-2xl border border-[var(--border)]
+         bg-[var(--surface-2)] p-6" [class.selected]="isSelectedPlayer" (click)="selectable && onSelectionChange()">
+
+    <!-- Selection -->
+    <div *ngIf="selectable" class="absolute top-4 right-4">
+        <input type="checkbox" class="ef-checkbox" [checked]="isSelectedPlayer" (change)="onSelectionChange()" (click)="$event.stopPropagation()" />
+    </div>
+
+    <!-- Header -->
+    <div class="flex flex-col items-center text-center mb-6">
+        <ng-container *ngIf="player.imageBase; else playerinitialsLogo">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center
+             bg-gradient-to-br from-purple-500 to-pink-500">
+                <app-icon [name]="player.imageBase ? 'custom' : 'trophy'" [imageLogo]="player.imageBase"></app-icon>
+            </div>
+        </ng-container>
+
+        <h3 class="text-lg font-semibold">
+            {{ player.name }}
+        </h3>
+
+        <p class="text-xs uppercase tracking-wide text-primary">
+            {{ player.role }}
+        </p>
+
+        <div class="flex items-center gap-1 text-xs text-[var(--text-muted)] mt-1">
+            <app-icon name="search-person" size="sm"></app-icon>
+            {{ player.area }}
+        </div>
+    </div>
+
+    <!-- Prices -->
+    <div class="space-y-2 text-sm mb-5">
+        <div class="flex justify-between">
+            <span class="text-[var(--text-muted)]">Base Price</span>
+            <span>{{ player.basePrice }}</span>
+        </div>
+
+        <!-- <div class="flex justify-between">
+            <span class="text-[var(--text-muted)]">Sold For</span>
+            <span [class.text-emerald-500]="player.sold" [class.text-[var(--text-muted)]]="!player.sold">
+                {{ player.sold ? (player.sold) : 'Unsold' }}
+            </span>
+        </div> -->
+    </div>
+
+    <!-- Auction Value -->
+    <!-- <div class="mb-6">
+        <div class="flex justify-between text-xs mb-1 text-[var(--text-muted)]">
+            <span>Auction Value</span>
+            <span>{{ player.increase }}%</span>
+        </div>
+
+        <div class="h-1.5 rounded-full bg-[var(--surface-3)] overflow-hidden">
+            <div class="h-full bg-primary" [style.width.%]="player.increase">
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Actions -->
+    <div *ngIf="!readOnly" class="flex gap-3 pt-4 border-t border-[var(--border)]">
+        <app-button variant="primary" color="blue" class="flex-1" [routerLink]="['/players', player.id, 'edit']">
+            <app-icon name="edit" size="sm"></app-icon>
+            Edit
+        </app-button>
+
+        <app-button variant="outline" color="red" (clickTriggered)="showDeleteConfirm = true">
+            <app-icon name="delete" size="sm"></app-icon>
+        </app-button>
+    </div>
+</div>
+
+<ng-template #playerinitialsLogo>
+    <div class="w-20 h-20 rounded-full flex items-center justify-center
+             text-2xl font-semibold mb-4
+             bg-[var(--surface-3)] text-primary">
+        {{ player.initial }}
+    </div>
+</ng-template>
+
+<app-confirm-dialog *ngIf="showDeleteConfirm" title="Are you sure you want to delete this player?"
+    message="This action cannot be undone and all associated data will be permanently removed."
+    confirmText="Yes, Delete" cancelText="No, Cancel" (confirm)="confirmDelete()" (cancel)="showDeleteConfirm = false">
+</app-confirm-dialog>

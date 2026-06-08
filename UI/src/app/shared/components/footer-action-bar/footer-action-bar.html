@@ -1,0 +1,26 @@
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-3xl px-6 footer-action-wrapper"
+    id="footerActionBar">
+    <div class="rounded-full flex items-center justify-between bulk-action-bar px-6 py-4">
+        <ng-container [ngTemplateOutlet]="templateForFooter || defaultTemplate"></ng-container>
+        <ng-template #defaultTemplate>
+            <div class="flex items-center gap-4">
+                <span class="text-xs font-semibold bg-white/20 px-2 py-1 rounded-md">
+                    {{ selectedItems.length }} Selected
+                </span>
+                <span class="text-sm font-medium">Bulk Actions</span>
+            </div>
+
+            <div class="flex gap-3">
+                <app-button variant="outline">
+                    <app-icon name="groups" size="sm"></app-icon>
+                    Assign to Team
+                </app-button>
+
+                <app-button variant="outline" color="red">
+                    <app-icon name="delete" size="sm"></app-icon>
+                    Delete
+                </app-button>
+            </div>
+        </ng-template>
+    </div>
+</div>

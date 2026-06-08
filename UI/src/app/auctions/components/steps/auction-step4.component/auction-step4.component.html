@@ -1,0 +1,128 @@
+<div class="ef-review-container">
+
+    <div class="ef-card ef-review-card">
+
+        <h2 class="ef-review-title">Final Review</h2>
+
+        <!-- AUCTION DETAILS -->
+        <div class="ef-section">
+
+            <div class="ef-section-header">
+                <app-icon name="info"></app-icon>
+                <span>Auction Details</span>
+            </div>
+
+            <div class="ef-review-details-box">
+                <div class="flex">
+                    <div class="session-box">
+                        <p class="ef-label">Auction Name</p>
+                        <p class="ef-value">{{auctionName}}</p>
+                    </div>
+                    <div class="date-box">
+                        <p class="ef-label">Scheduled Date</p>
+                        <p class="ef-value">{{activeAuctionScheduledAt | date:'medium'}}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- STATS GRID -->
+        <div class="ef-review-grid">
+
+            <!-- Teams -->
+            <div class="ef-stat-box">
+
+                <div class="ef-section-header">
+                    <app-icon name="groups"></app-icon>
+                    <span>Teams Selected</span>
+                </div>
+
+                <div class="ef-stat-content">
+                    <div class="ef-value-left">
+                        <div class="ef-value-icon">
+                            <app-icon name="wallet"></app-icon>
+                        </div>
+                        <div>
+                            <div class="ef-label">Total Budget</div>
+                            <div class="ef-small-value">{{auctionTeams ? auctionTeams.length * perTeamBudget : 0}}</div>
+                        </div>
+                    </div>
+
+                    <div class="ef-stat-center">
+                        <div class="ef-stat-number">{{auctionTeams?.length}}</div>
+                        <div class="ef-stat-label">Total Teams</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Players -->
+            <div class="ef-stat-box">
+
+                <div class="ef-section-header">
+                    <app-icon name="person"></app-icon>
+                    <span>Players Pool</span>
+                </div>
+
+                <div class="ef-stat-content">
+
+                    <div class="ef-value-left">
+                        <div class="ef-value-icon">
+                            <app-icon name="gavel"></app-icon>
+                        </div>
+                        <div>
+                            <div class="ef-label">Total Value</div>
+                            <div class="ef-small-value">{{auctionPlayers ? auctionPlayers.length * perTeamBudget : 0}}</div>
+                        </div>
+                    </div>
+
+                    <div class="ef-stat-center">
+                        <div class="ef-stat-number">{{auctionPlayers?.length}}</div>
+                        <div class="ef-stat-label">Participants</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- INFO BOX -->
+        <div class="ef-info-box">
+            <app-icon name="light"></app-icon>
+            <p>
+                Once started, the auction will be visible to all operators and teams.
+                Bidding will begin immediately upon entering the live room.
+                You can still modify these settings later from the Session dashboard.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+<footer-action-bar [templateForFooter]="footerTemplate"></footer-action-bar>
+<ng-template #footerTemplate>
+    <span>
+        Step {{ auctionStep + 1 }} of 4
+    </span>
+
+    <div class="ef-footer-actions">
+        <app-button variant="outline" (clickTriggered)="cancel()">
+            <app-icon name="x-circle"></app-icon>
+            Cancel
+        </app-button>
+
+        <app-button variant="outline" (clickTriggered)="prev()">
+            <app-icon name="arrow-circle-left"></app-icon>
+            Previous
+        </app-button>
+
+        <app-button variant="primary" (clickTriggered)="save()">
+            <app-icon name="check-circle"></app-icon>
+            Save Auction
+        </app-button>
+
+    </div>
+</ng-template>
