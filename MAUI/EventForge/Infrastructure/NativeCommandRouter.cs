@@ -20,6 +20,16 @@ public static class NativeCommandRouter
             "system.pickImage" =>
                 await HybridBridge.UploadFile(),
 
+            // -------- LICENSE --------
+            "license.status" =>
+                HybridBridge.GetLicenseStatus(),
+
+            "license.activate" =>
+                HybridBridge.ActivateLicense(payloadJson!),
+
+            "license.deactivate" =>
+                HybridBridge.DeactivateLicense(),
+
             // -------- LEAGUE --------
             "league.getAll" =>
                 await HybridBridge.GetLeagues(),

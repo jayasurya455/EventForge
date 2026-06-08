@@ -1,6 +1,12 @@
 # .NET build artifacts
 MAUI/**/bin/
 MAUI/**/obj/
+tools/**/bin/
+tools/**/obj/
+
+# License signing private key — must NEVER be committed
+**/eventforge-private.key
+*.private.key
 
 # MAUI integrated Angular output — regenerate with: cd UI && npm run build:maui
 MAUI/EventForge/Resources/Raw/wwwroot/

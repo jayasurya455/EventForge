@@ -9,6 +9,19 @@ export class NativeBridgeService {
     return (window as any).EventForge.invoke(method, payload);
   }
 
+  //license
+  getLicenseStatus(): Promise<any> {
+    return this.invoke('license.status');
+  }
+
+  activateLicense(key: string): Promise<any> {
+    return this.invoke('license.activate', { key });
+  }
+
+  deactivateLicense(): Promise<any> {
+    return this.invoke('license.deactivate');
+  }
+
   //Leagues
   createLeague(payload: any): Promise<any> {
     return this.invoke('league.create', payload);
