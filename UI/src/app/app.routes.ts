@@ -7,6 +7,12 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
+        path: 'activate',
+        loadComponent: () =>
+            import('./shell/license-activation/license-activation.component')
+                .then(m => m.LicenseActivationComponent)
+    },
+    {
         path: 'leagues',
         loadComponent: () =>
             import('./leagues/components/league-list.component/league-list.component')

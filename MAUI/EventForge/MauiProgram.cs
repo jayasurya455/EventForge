@@ -5,6 +5,7 @@ using EventForge.Hybrid.Handlers.Auctions;
 using EventForge.Hybrid.Mappers;
 using EventForge.Infrastructure;
 using EventForge.Infrastructure.FileStore;
+using EventForge.Infrastructure.Licensing;
 using EventForge.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
@@ -42,6 +43,11 @@ public static class MauiProgram
         builder.Services.AddScoped<HybridFilePicker>();
         builder.Services.AddSingleton(new FileStorage(App.AppDataRoot));
         builder.Services.AddSingleton(new ImageBase64Resolver(App.AppDataRoot));
+
+        // -----------------------------
+        // LICENSING (offline, app-shell only)
+        // -----------------------------
+        builder.Services.AddSingleton(new LicenseService(App.AppDataRoot));
 
         //Mappers
         builder.Services.AddSingleton<LeagueMapper>();

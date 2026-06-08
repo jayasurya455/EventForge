@@ -9,6 +9,7 @@ using EventForge.Hybrid.Handlers.Players;
 using EventForge.Hybrid.Handlers.Teams;
 using EventForge.Hybrid.Handlers.Auctions;
 using EventForge.Infrastructure.FileStore;
+using EventForge.Infrastructure.Licensing;
 using Microsoft.JSInterop;
 using System.Text.Json;
 
@@ -41,6 +42,34 @@ public static class HybridBridge
         };
         return JsonSerializer.Serialize(obj);
     }
+
+    #region License
+
+    [JSInvokable]
+    public static string GetLicenseStatus()
+    {
+        var snapshot = Resolve<LicenseService>().GetSnapshot();
+        return JsonSerializer.Serialize(snapshot);
+    }
+
+    [JSInvokable]
+    public static string ActivateLicense(string payload)
+    {
+        var command = JsonSerializer.Deserialize<ActivateLicenseCommand>(payload)!;
+        var snapshot = Resolve<LicenseService>().Activate(command.Key);
+        return JsonSerializer.Serialize(snapshot);
+    }
+
+    [JSInvokable]
+    public static string DeactivateLicense()
+    {
+        var snapshot = Resolve<LicenseService>().Deactivate();
+        return JsonSerializer.Serialize(snapshot);
+    }
+
+    private sealed record ActivateLicenseCommand(string? Key);
+
+    #endregion
 
     #region Leagues
 
